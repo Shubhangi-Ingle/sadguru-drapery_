@@ -1,0 +1,27 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from database import engine, Base
+from routers import categories, subcategories, products, sizes,reviews,auth
+import models
+
+Base.metadata.create_all(bind=engine)
+
+app = FastAPI(title="Sadguru Drapery API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(categories.router)
+app.include_router(subcategories.router)
+app.include_router(products.router)
+app.include_router(sizes.router)    
+app.include_router(reviews.router)
+app.include_router(auth.router)
+
+@app.get("/")
+def health_check():
+    return {"status": "Sadguru Drapery API is running"}
