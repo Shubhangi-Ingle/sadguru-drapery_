@@ -13,6 +13,8 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173",
         "https://sadguru-drapery.vercel.app",
+        "https://sadgurudrapery.shop",
+        "https://www.sadgurudrapery.shop",
     ],
     allow_methods=["*"],
     allow_headers=["*"],
