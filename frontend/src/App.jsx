@@ -18,6 +18,7 @@ import AdminProducts from './pages/admin/AdminProducts'
 import AdminProductDetail from './pages/admin/AdminProductDetail'
 import AdminSizeCharts from './pages/admin/AdminSizeCharts'
 import AdminReviews from './pages/admin/AdminReviews'
+import ScrollToTop from './components/ScrollToTop'
 
 function Layout() {
   const location = useLocation()
@@ -67,6 +68,7 @@ function Layout() {
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Layout />
     </BrowserRouter>
   )

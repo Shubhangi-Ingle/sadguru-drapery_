@@ -87,7 +87,7 @@ function ProductDetail() {
   }
 
   const status = statusStyles[product.status] || statusStyles.available
-  const whatsappNumber = "919999999999" // same number as WhatsAppButton.jsx — replace with real number
+  const whatsappNumber = "918552887919"
   const whatsappMessage = `Hi! I'm interested in "${product.name}". Is it available?`
 
   return (

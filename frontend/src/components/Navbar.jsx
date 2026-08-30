@@ -18,7 +18,7 @@ function Navbar() {
         <Link to="/" className="flex items-center gap-3">
           <img src="/logo.png" alt="Sadguru Drapery" className="h-14 w-14 object-contain" />
           <span className="font-brand text-2xl font-bold text-gray-800 leading-tight">
-            Sadguru Drapery
+            Sadguru Costume
           </span>
         </Link>
 

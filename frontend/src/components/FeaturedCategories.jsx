@@ -26,11 +26,11 @@ function FeaturedCategories() {
   }
 
   return (
-    <section className="max-w-7xl mx-auto px-4 py-16">
+    <section className="max-w-7xl mx-auto px-4 pt-28 pb-16">
       <div className="text-center mb-10">
-        <h2 className="font-brand text-3xl md:text-4xl font-bold text-gray-800 mb-3">
-          Explore Our Categories
-        </h2>
+        <h2 className="font-impact uppercase text-3xl md:text-4xl text-gray-900 mb-3 tracking-wide">
+  Explore Our Categories
+</h2>
         <p className="text-gray-500 max-w-xl mx-auto">
           From dance performances to festive occasions — find the perfect costume for your moment.
         </p>
@@ -65,7 +65,7 @@ function FeaturedCategories() {
       <div className="text-center mt-10">
         <Link
           to="/catalogue"
-          className="inline-block border-2 border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white font-semibold px-8 py-3 rounded-full transition-colors"
+          className="inline-block border-2 border-[#7A1F2B] text-[#7A1F2B] hover:bg-[#7A1F2B] hover:text-white font-semibold px-8 py-3 rounded-full transition-colors"
         >
           View Full Catalogue
         </Link>

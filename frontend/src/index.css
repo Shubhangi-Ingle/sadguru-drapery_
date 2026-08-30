@@ -10,6 +10,15 @@ body {
   font-family: 'Baloo 2', sans-serif;
 }
 
+.font-impact {
+  font-family: 'Anton', sans-serif;
+}
+
+.font-italic-editorial {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+}
+
 .hide-scrollbar {
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -34,4 +43,19 @@ body {
 
 .marquee-left:hover {
   animation-play-state: paused;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.7s ease-out both;
 }

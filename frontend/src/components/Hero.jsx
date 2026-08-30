@@ -3,23 +3,33 @@ import { Link } from 'react-router-dom'
 function Hero() {
   return (
     <section className="relative overflow-hidden">
-      <div className="max-w-[1600px] mx-auto px-6 md:px-12 py-16 md:py-24 flex flex-col items-center text-center relative z-10">
-        <span className="inline-block bg-pink-50 border border-pink-200 text-pink-600 text-sm font-medium px-4 py-1.5 rounded-full mb-6">
-          Costume Rentals
+      <div className="absolute -top-20 -left-20 w-96 h-96 bg-gradient-to-br from-[#7A1F2B]/25 to-transparent rounded-full blur-3xl pointer-events-none" />
+<div className="absolute -bottom-20 -right-20 w-96 h-96 bg-gradient-to-tl from-[#7A1F2B]/25 to-transparent rounded-full blur-3xl pointer-events-none" />
+      <div className="max-w-7xl mx-auto px-4 py-16 md:py-24 flex flex-col items-center text-center relative z-10">
+        <span
+          className="inline-block bg-[#7A1F2B]/5 border border-[#7A1F2B]/20 text-[#7A1F2B] text-sm font-medium px-4 py-1.5 rounded-full mb-6 animate-fade-up"
+          style={{ animationDelay: '0ms' }}
+        >
+          Costume Collection
         </span>
-        <h1 className="font-brand text-4xl md:text-6xl font-bold leading-tight mb-4 text-gray-900">
-          Rent the Perfect Costume<br className="hidden md:block" /> for Every Occasion
+        <h1
+          className="font-impact uppercase text-3xl md:text-5xl leading-tight mb-4 text-gray-900 tracking-wide animate-fade-up"
+          style={{ animationDelay: '100ms' }}
+        >
+          Own The Perfect Costume<br className="hidden md:block" /> For Every Occasion
         </h1>
-        <p className="text-gray-500 text-lg md:text-xl max-w-2xl mb-8">
-          Beautifully crafted costumes for every occasion — available to rent,
-          no need to buy. Browse our full collection and find your perfect look.
+        <p
+          className="font-italic-editorial text-gray-700 text-lg md:text-xl max-w-2xl mb-12 animate-fade-up"
+          style={{ animationDelay: '220ms' }}
+        >
+          Beautifully crafted costumes for every occasion — yours to keep, forever.
         </p>
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex flex-col sm:flex-row gap-4 animate-fade-up" style={{ animationDelay: '340ms' }}>
           <Link
             to="/catalogue"
-            className="bg-pink-600 hover:bg-pink-700 text-white font-semibold px-8 py-3.5 rounded-full transition-colors shadow-lg shadow-pink-600/20"
+            className="bg-[#7A1F2B] hover:bg-[#5C1620] text-white font-semibold px-8 py-3.5 rounded-full transition-colors shadow-lg shadow-[#7A1F2B]/20"
           >
-            Browse Catalogue
+            Shop Catalogue
           </Link>
           <Link
             to="/visit-us"
