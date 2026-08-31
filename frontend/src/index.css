@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+@theme {
+  --font-display: "Fraunces", ui-serif, Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
 body {
   font-family: 'Poppins', sans-serif;
   background-color: #f9fafb;
@@ -58,4 +63,94 @@ body {
 
 .animate-fade-up {
   animation: fade-up 0.7s ease-out both;
+}
+
+@keyframes button-shine {
+  0% {
+    transform: translateX(-100%) skewX(-20deg);
+  }
+  100% {
+    transform: translateX(200%) skewX(-20deg);
+  }
+}
+
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shine::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  transform: translateX(-100%) skewX(-20deg);
+}
+
+.btn-shine:hover::before {
+  animation: button-shine 0.9s ease;
+}
+
+
+.font-impact,
+.font-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-variation-settings: "SOFT" 25, "WONK" 1, "opsz" 144;
+  letter-spacing: -0.018em;
+}
+
+/* Slightly tighter optical size for smaller display text */
+.font-display-sm {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-variation-settings: "SOFT" 20, "WONK" 0, "opsz" 36;
+  letter-spacing: -0.01em;
+}
+
+/* ── Scroll reveal ─────────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(var(--reveal-y, 24px));
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-in {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+/* ── On-mount rise (for above-the-fold content) ────────────── */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.rise {
+  opacity: 0;
+  animation: rise-in 0.75s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-in,
+  .rise {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
 }

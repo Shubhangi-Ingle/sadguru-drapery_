@@ -6,8 +6,6 @@ import RequireAuth from './components/RequireAuth'
 import Home from './pages/Home'
 import Catalogue from './pages/Catalogue'
 import ProductDetail from './pages/ProductDetail'
-import VisitUs from './pages/VisitUs'
-import About from './pages/About'
 import NotFound from './pages/NotFound'
 import AdminLogin from './pages/admin/AdminLogin'
 import AdminDashboard from './pages/admin/AdminDashboard'
@@ -35,9 +33,7 @@ function Layout() {
           <Route path="/catalogue/:categoryId" element={<Catalogue />} />
           <Route path="/catalogue/:categoryId/:subcategoryId" element={<Catalogue />} />
           <Route path="/product/:productId" element={<ProductDetail />} />
-          <Route path="/visit-us" element={<VisitUs />} />
-          <Route path="/about" element={<About />} />
-
+         
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route
             path="/admin"
