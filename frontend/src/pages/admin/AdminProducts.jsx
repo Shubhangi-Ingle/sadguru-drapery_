@@ -7,6 +7,7 @@ const emptyForm = {
   name: '',
   description: '',
   rent_price: '',
+  original_price: '',
   status: 'available',
   available_from: '',
   category_id: '',
@@ -63,11 +64,13 @@ function AdminProducts() {
       name: product.name || '',
       description: product.description || '',
       rent_price: product.rent_price ?? '',
+      original_price: product.original_price ?? '',
       status: product.status || 'available',
       available_from: product.available_from || '',
       category_id: product.category_id ?? '',
       subcategory_id: product.subcategory_id ?? '',
     })
+
     setEditingId(product.id)
     setShowForm(true)
   }
@@ -84,6 +87,7 @@ function AdminProducts() {
       name: form.name.trim(),
       description: form.description.trim() || null,
       rent_price: form.rent_price ? Number(form.rent_price) : null,
+      original_price: form.original_price ? Number(form.original_price) : null,
       status: form.status,
       available_from: form.status === 'rented_out' && form.available_from ? form.available_from : null,
       category_id: Number(form.category_id),
@@ -161,11 +165,21 @@ function AdminProducts() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Rent Price (₹)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Selling Price (₹)</label>
               <input
                 type="number"
                 value={form.rent_price}
                 onChange={(e) => setForm({ ...form, rent_price: e.target.value })}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-200"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Original Price / MRP (₹) — optional</label>
+              <input
+                type="number"
+                value={form.original_price}
+                onChange={(e) => setForm({ ...form, original_price: e.target.value })}
+                placeholder="Leave blank for no discount shown"
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-200"
               />
             </div>

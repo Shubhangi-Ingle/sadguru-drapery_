@@ -34,6 +34,7 @@ class Product(Base):
     name = Column(String, nullable=False)
     description = Column(Text, nullable=True)
     rent_price = Column(Float, nullable=True)
+    original_price = Column(Float, nullable=True)
     status = Column(String, default="available")
     available_from = Column(Date, nullable=True)
 

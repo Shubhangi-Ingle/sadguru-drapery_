@@ -37,6 +37,7 @@ class ProductCreate(BaseModel):
     name: str
     description: Optional[str] = None
     rent_price: Optional[float] = None
+    original_price: Optional[float] = None
     status: str = "available"
     available_from: Optional[date] = None
     category_id: int
@@ -98,6 +99,7 @@ class ProductOut(BaseModel):
     name: str
     description: Optional[str] = None
     rent_price: Optional[float] = None
+    original_price: Optional[float] = None
     status: str
     available_from: Optional[date] = None
     category_id: int
@@ -132,6 +134,7 @@ class ProductUpdate(BaseModel):
     name: Optional[str] = None
     description: Optional[str] = None
     rent_price: Optional[float] = None
+    original_price: Optional[float] = None
     status: Optional[str] = None
     available_from: Optional[date] = None
     category_id: Optional[int] = None
