@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from database import engine, Base
 from routers import categories, subcategories, products, sizes,reviews,auth
 import models
+from routers import categories, subcategories, products, sizes, reviews, auth as auth_router, designs
 
 Base.metadata.create_all(bind=engine)
 
@@ -26,6 +27,7 @@ app.include_router(products.router)
 app.include_router(sizes.router)    
 app.include_router(reviews.router)
 app.include_router(auth.router)
+app.include_router(designs.router)
 
 @app.get("/")
 def health_check():

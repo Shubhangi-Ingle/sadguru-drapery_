@@ -1,6 +1,7 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Text, Float, Date, Table
+from sqlalchemy import Column, Integer, String, ForeignKey, Text, Float, Date, Table, DateTime
 from sqlalchemy.orm import relationship
 from database import Base
+from datetime import datetime
 
 product_relations = Table(
     "product_relations",
@@ -100,3 +101,13 @@ class AdminUser(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, nullable=False)
     hashed_password = Column(String, nullable=False)
+
+    from datetime import datetime
+
+class Design(Base):
+    __tablename__ = "designs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    image_url = Column(String, nullable=False)
+    caption = Column(String, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)

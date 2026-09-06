@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import List, Optional
 from datetime import date
+from datetime import datetime as dt
 
 class SubcategoryOut(BaseModel):
     id: int
@@ -142,3 +143,16 @@ class ProductUpdate(BaseModel):
 
 class SizeChartUpdate(BaseModel):
     chart_text: Optional[str] = None
+
+
+class DesignOut(BaseModel):
+    id: int
+    image_url: str
+    caption: Optional[str] = None
+    created_at: dt
+
+    class Config:
+        from_attributes = True
+
+class DesignUpdate(BaseModel):
+    caption: Optional[str] = None

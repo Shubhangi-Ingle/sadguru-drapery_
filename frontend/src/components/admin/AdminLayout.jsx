@@ -9,6 +9,7 @@ const navItems = [
   { name: 'Products', path: '/admin/products' },
   { name: 'Size Charts', path: '/admin/size-charts' },
   { name: 'Reviews', path: '/admin/reviews' },
+  { name: 'Design Gallery', path: '/admin/designs' },
 ]
 
 function AdminLayout() {
