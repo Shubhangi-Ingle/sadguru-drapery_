@@ -149,11 +149,11 @@ function Hero() {
                 ))}
               </div>
 
-              <Link
-                to="/catalogue"
-                className="group mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-[#7A1F2B] hover:text-[#B8863B] transition-colors"
-              >
-                Browse all designs
+                          <Link
+              to="/design-gallery"
+              className="inline-flex items-center gap-1.5 text-[#7A1F2B] font-semibold text-sm hover:gap-2.5 transition-all"
+            >
+              Browse all designs
                 <svg
                   viewBox="0 0 24 24"
                   fill="none"

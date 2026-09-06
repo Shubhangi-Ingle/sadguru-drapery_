@@ -18,6 +18,8 @@ import AdminSizeCharts from './pages/admin/AdminSizeCharts'
 import AdminReviews from './pages/admin/AdminReviews'
 import ScrollToTop from './components/ScrollToTop'
 import AdminDesigns from './pages/admin/AdminDesigns'
+import DesignGallery from './pages/DesignGallery'
+
 
 function Layout() {
   const location = useLocation()
@@ -34,7 +36,8 @@ function Layout() {
           <Route path="/catalogue/:categoryId" element={<Catalogue />} />
           <Route path="/catalogue/:categoryId/:subcategoryId" element={<Catalogue />} />
           <Route path="/product/:productId" element={<ProductDetail />} />
-                   
+          <Route path="/design-gallery" element={<DesignGallery />} />
+
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route
             path="/admin"

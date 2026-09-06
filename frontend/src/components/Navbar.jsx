@@ -8,6 +8,7 @@ const navLinks = [
   { name: 'Product Range', path: '/#product-range' },
   { name: 'How It Works', path: '/#how-it-works' },
   { name: 'Catalogue', path: '/catalogue' },
+   { name: 'Design Gallery', path: '/design-gallery' },
 ]
 
 function Navbar() {
