@@ -12,7 +12,7 @@ const popularProducts = [
 const stats = [
   { value: '13+', label: 'Years in the trade' },
   { value: '700+', label: 'Google reviews' },
-  { value: '500+', label: 'Costumes / month capacity' },
+  { value: 'Variety of', label: 'Costumes' },
   { value: 'In-house', label: 'Own manufacturing unit' },
 ]
 
@@ -131,7 +131,7 @@ function Hero() {
                 Popular for resale &amp; rental stock
               </p>
               <p className="text-sm text-gray-500 mb-5">
-                A few of 500+ designs — wholesale rates on quantity.
+                Variety of designs — wholesale rates on quantity.
               </p>
 
               <div className="grid grid-cols-2 gap-3 sm:gap-4">
