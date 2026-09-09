@@ -19,13 +19,18 @@ import AdminReviews from './pages/admin/AdminReviews'
 import ScrollToTop from './components/ScrollToTop'
 import AdminDesigns from './pages/admin/AdminDesigns'
 import DesignGallery from './pages/DesignGallery'
+import { useEffect } from 'react'
+import { pageview } from './utils/analytics'
 
 
 function Layout() {
   const location = useLocation()
   const isProductPage = location.pathname.startsWith('/product/')
   const isAdminPage = location.pathname.startsWith('/admin')
-
+    useEffect(() => {
+    pageview(location.pathname)
+  }, [location.pathname])
+  
   return (
     <div className="flex flex-col min-h-screen">
       {!isAdminPage && <Navbar />}

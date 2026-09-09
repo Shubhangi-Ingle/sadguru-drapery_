@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Reveal from './Reveal'
 import { getCategories } from '../api/categories'
 import { WHATSAPP_NUMBER, PHONE_DISPLAY, HOURS, ADDRESS } from '../config'
+import { trackEvent } from '../utils/analytics'
 
 const quantities = ['1–9 (sample)', '10–24', '25–49', '50–99', '100+']
 
@@ -54,6 +55,7 @@ function GetQuote() {
     ].filter(Boolean)
 
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`
+    trackEvent('quote_form_submit')
     window.open(url, '_blank', 'noopener,noreferrer')
   }
 

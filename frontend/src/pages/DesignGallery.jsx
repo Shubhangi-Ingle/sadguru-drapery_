@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { getDesigns, getDesignsCount } from '../api/designs'
 import { optimizeImage } from '../utils/cloudinary'
+import Seo from '../components/Seo'
 
 const PAGE_SIZE = 24
 
@@ -29,12 +30,17 @@ function DesignGallery() {
     setLoadingMore(true)
     getDesigns(designs.length, PAGE_SIZE)
       .then((data) => setDesigns((prev) => [...prev, ...data]))
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => setLoadingMore(false))
   }
-
+  
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
+      <Seo
+    title="Design Gallery"
+    description="Explore our gallery of costume designs — get inspired before you rent or place a bulk order."
+    path="/design-gallery"
+  />
       <div className="text-center mb-10">
         <p className="text-xs font-semibold tracking-[0.15em] uppercase text-[#B8863B] mb-3">
           Design Gallery

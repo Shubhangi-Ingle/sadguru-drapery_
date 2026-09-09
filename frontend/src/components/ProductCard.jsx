@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
 import { WHATSAPP_NUMBER } from '../config'
 import { optimizeImage } from '../utils/cloudinary'
+import { useState } from 'react'
+import { trackEvent } from '../utils/analytics'
 
 function ProductCard({ product }) {
   const coverImage =
@@ -10,10 +12,13 @@ function ProductCard({ product }) {
   const price = product.rent_price || 0
   const hasDiscount = product.original_price && product.original_price > price
   const discountPercent = hasDiscount ? Math.round((1 - price / product.original_price) * 100) : null
+  
+// Hypothetical placeholder data — shown until a real chart is uploaded in admin for this category
 
   const handleEnquire = (e) => {
     e.preventDefault()
     e.stopPropagation()
+    trackEvent('whatsapp_click', { source: 'product_card', product_name: product.name })
     const message = `Hi! I'd like to enquire about "${product.name}".`
     window.open(
       `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`,
@@ -21,6 +26,9 @@ function ProductCard({ product }) {
       'noopener,noreferrer'
     )
   }
+
+  
+
 const EnquireButton = ({ className = '' }) => (
   <button
     type="button"
@@ -68,6 +76,7 @@ const EnquireButton = ({ className = '' }) => (
           </div>
         )}
         <EnquireButton className="text-[11px] py-1.5 px-3 mt-1.5" />
+       
       </div>
 
       {/* Tablet/Desktop: existing vertical grid card */}
@@ -108,8 +117,10 @@ const EnquireButton = ({ className = '' }) => (
             </div>
           )}
           <EnquireButton className="w-full text-xs md:text-sm py-2.5 mt-2" />
+        
         </div>
       </div>
+     
     </Link>
   )
 }

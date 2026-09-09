@@ -54,13 +54,13 @@ class ProductImageOut(BaseModel):
 
 
 class SizeChartCreate(BaseModel):
-    category_id: int
+    category_id: Optional[int] = None
     chart_text: Optional[str] = None
 
 
 class SizeChartOut(BaseModel):
     id: int
-    category_id: int
+    category_id: Optional[int] = None
     chart_image_url: Optional[str] = None
     chart_text: Optional[str] = None
 

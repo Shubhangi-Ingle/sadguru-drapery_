@@ -11,9 +11,10 @@ router = APIRouter(tags=["Sizes"])
 # ---- Size Chart (per category) ----
 @router.post("/size-charts/", response_model=schemas.SizeChartOut)
 def create_size_chart(chart: schemas.SizeChartCreate, db: Session = Depends(get_db), admin: models.AdminUser = Depends(auth.get_current_admin)):
-    category = db.query(models.Category).filter(models.Category.id == chart.category_id).first()
-    if not category:
-        raise HTTPException(status_code=404, detail="Category not found")
+    if chart.category_id is not None:
+        category = db.query(models.Category).filter(models.Category.id == chart.category_id).first()
+        if not category:
+            raise HTTPException(status_code=404, detail="Category not found")
 
     new_chart = models.SizeChart(category_id=chart.category_id, chart_text=chart.chart_text)
     db.add(new_chart)

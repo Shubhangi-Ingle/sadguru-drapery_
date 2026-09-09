@@ -8,11 +8,11 @@ export async function getSizeChartsAdmin() {
   return res.json()
 }
 
-export async function createSizeChart(categoryId, chartText) {
+export async function createSizeChart(chartText) {
   const res = await adminFetch(`/size-charts/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ category_id: Number(categoryId), chart_text: chartText || null }),
+    body: JSON.stringify({ category_id: null, chart_text: chartText || null }),
   })
   if (!res.ok) throw new Error("Failed to create size chart")
   return res.json()

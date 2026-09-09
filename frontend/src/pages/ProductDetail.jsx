@@ -5,6 +5,8 @@ import { getApprovedReviews, submitReview, uploadReviewImage } from '../api/revi
 import { WHATSAPP_NUMBER } from '../config'
 import { optimizeImage } from '../utils/cloudinary'
 import { getSizeCharts } from '../api/sizeCharts'
+import Seo from '../components/Seo'
+import { trackEvent } from '../utils/analytics'
 
 const statusStyles = {
   available: { label: "In Production", classes: "bg-green-100 text-green-700" },
@@ -100,10 +102,24 @@ function ProductDetail() {
   }
 
   const status = statusStyles[product.status] || statusStyles.available
+  const matchedChart = sizeCharts[0]
+  const dummySizeChart = [
+    { label: 'XSC (X-Small Child)', bust: '19–21', waist: '19–21', hips: '19–21' },
+    { label: 'SC (Small Child)', bust: '23–26', waist: '22–24', hips: '23–27' },
+    { label: 'MC (Medium Child)', bust: '27–29', waist: '23–24', hips: '26–29' },
+    { label: 'LC (Large Child)', bust: '29–32', waist: '24–25', hips: '32–34' },
+    { label: 'SA (Small Adult)', bust: '34–36', waist: '25–26', hips: '34–36' },
+  ]
   const whatsappMessage = `Hi! I'd like a bulk rate for "${product.name}".`
-
+  
   return (
     <div className="bg-[#FDF8F1]">
+       <Seo
+        title={product.name}
+        description={product.description || `${product.name} — available for rent or bulk order at Sadguru Costume.`}
+        image={activeImage}
+        path={`/product/${productId}`}
+      />
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Back button */}
         <button
@@ -150,9 +166,7 @@ function ProductDetail() {
 
           {/* Info panel */}
           <div>
-            <span className={`inline-block text-xs font-medium px-2.5 py-1 rounded-full mb-3 ${status.classes}`}>
-              {status.label}
-            </span>
+        
             <h1 className="font-display text-2xl md:text-3xl text-gray-900 mb-2">
               {product.name}
             </h1>
@@ -176,70 +190,34 @@ function ProductDetail() {
               <p className="text-gray-600 leading-relaxed mb-6">{product.description}</p>
             )}
 
-            {/* Size selector + Check Availability + Size Chart */}
-            {product.sizes?.length > 0 && (
-              <div className="mb-6">
-                <div className="flex items-center justify-between mb-2 flex-wrap gap-2">
-                  <span className="text-sm font-medium text-gray-700">Select Size</span>
-                  <div className="flex items-center gap-4">
-                    <button
-                      onClick={() => setShowAvailability(true)}
-                      className="text-xs font-semibold text-[#7A1F2B] hover:underline"
-                    >
-                      Check Availability
-                    </button>
-                    {sizeCharts.some((c) => c.category_id === product.category_id) && (
-                      <button
-                        onClick={() => setShowSizeChart(!showSizeChart)}
-                        className="text-xs font-semibold text-[#7A1F2B] hover:underline"
-                      >
-                        {showSizeChart ? 'Hide Size Chart' : 'Size Chart'}
-                      </button>
-                    )}
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap gap-2 mb-3">
-                  {product.sizes.map((size) => (
-                    <button
-                      key={size.id}
-                      disabled={size.is_available === 0}
-                      className={`min-w-[3rem] px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${size.is_available === 0
-                          ? 'border-gray-200 text-gray-300 line-through cursor-not-allowed bg-gray-50'
-                          : 'border-gray-300 text-gray-700 hover:border-pink-500 hover:text-pink-600'
-                        }`}
-                    >
-                      {size.size_label}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Inline Size Chart */}
-                {showSizeChart && (
-                  <div className="border border-gray-200 rounded-xl p-4 mb-3">
-                    {sizeCharts
-                      .filter((c) => c.category_id === product.category_id)
-                      .map((chart) => (
-                        <div key={chart.id}>
-                          {chart.chart_image_url && (
-                            <img src={chart.chart_image_url} alt="Size chart" className="w-full rounded-lg mb-3" />
-                          )}
-                          {chart.chart_text && (
-                            <p className="text-sm text-gray-600 leading-relaxed">{chart.chart_text}</p>
-                          )}
-                        </div>
-                      ))}
-                  </div>
-                )}
-              </div>
-            )}
-
+            {/* Check Availability + Size Chart */}
+            <div className="flex items-center gap-3 mb-6">
+              <button
+                onClick={() => setShowAvailability(true)}
+                className="flex items-center gap-1.5 text-xs font-semibold text-[#7A1F2B] border border-[#7A1F2B]/25 hover:bg-[#7A1F2B]/5 rounded-full px-3.5 py-2 transition-colors"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Check Availability
+              </button>
+              <button
+                onClick={() => setShowSizeChart(true)}
+                className="flex items-center gap-1.5 text-xs font-semibold text-[#7A1F2B] border border-[#7A1F2B]/25 hover:bg-[#7A1F2B]/5 rounded-full px-3.5 py-2 transition-colors"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 4v16M17 4v16M3 8h4M3 16h4M17 8h4M17 16h4" />
+                </svg>
+                Size Chart
+              </button>
+            </div>
             {/* Enquiry buttons */}
             <div className="flex flex-col sm:flex-row gap-3 mb-2 pt-2 border-t border-[#B8863B]/20">
               <a
                 href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappMessage)}`}
                 target="_blank"
                 rel="noopener noreferrer"
+                 onClick={() => trackEvent('whatsapp_click', { source: 'product_detail', product_name: product.name })}
                 className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-[#20A44E] to-[#158A3E] hover:from-[#1c9346] hover:to-[#117535] text-white font-semibold px-6 py-3.5 rounded-xl text-center transition-colors shadow-md shadow-green-700/20 mt-4"
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -250,6 +228,7 @@ function ProductDetail() {
               </a>
               <a
                 href={`tel:+${WHATSAPP_NUMBER}`}
+                  onClick={() => trackEvent('call_click', { source: 'product_detail', product_name: product.name })}
                 className="flex-1 flex items-center justify-center gap-2 bg-gray-900 hover:bg-black text-white font-semibold px-6 py-3.5 rounded-xl text-center transition-colors shadow-md shadow-gray-900/20 mt-4"
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -508,6 +487,61 @@ function ProductDetail() {
                   </tbody>
                 </table>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Size Chart Modal */}
+      {showSizeChart && (
+        <div
+          className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4"
+          onClick={() => setShowSizeChart(false)}
+        >
+          <div
+            className="bg-white rounded-2xl max-w-lg w-full max-h-[85vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+              <h3 className="font-semibold text-gray-900 text-lg">Size Chart</h3>
+              <button onClick={() => setShowSizeChart(false)} className="text-gray-400 hover:text-gray-700">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="px-6 py-4">
+              {matchedChart?.chart_image_url ? (
+                <img src={matchedChart.chart_image_url} alt="Size chart" className="w-full rounded-lg" />
+              ) : (
+                <>
+                  <p className="text-sm text-gray-500 mb-4">
+                    Sample chart — final measurements may vary. Message us on WhatsApp to confirm fit.
+                  </p>
+                  <div className="border border-gray-200 rounded-xl overflow-hidden">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr>
+                          <th className="text-left px-4 py-3 font-semibold text-white bg-gray-900">Size</th>
+                          <th className="text-left px-4 py-3 font-semibold text-white bg-[#7A1F2B]">Bust</th>
+                          <th className="text-left px-4 py-3 font-semibold text-white bg-green-600">Waist</th>
+                          <th className="text-left px-4 py-3 font-semibold text-white bg-gray-900">Hips</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {dummySizeChart.map((row, idx) => (
+                          <tr key={row.label} className={idx % 2 === 1 ? 'bg-gray-50' : 'bg-white'}>
+                            <td className="px-4 py-3 text-gray-800 font-medium">{row.label}</td>
+                            <td className="px-4 py-3 text-gray-700">{row.bust}</td>
+                            <td className="px-4 py-3 text-gray-700">{row.waist}</td>
+                            <td className="px-4 py-3 text-gray-700">{row.hips}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>

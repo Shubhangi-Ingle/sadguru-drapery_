@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { getCategories } from '../api/categories'
 import { getProducts } from '../api/products'
 import ProductCard from '../components/ProductCard'
+import { getSizeCharts } from '../api/sizeCharts'
+import Seo from '../components/Seo'
 
 function Catalogue() {
   const { categoryId, subcategoryId } = useParams()
@@ -12,6 +14,7 @@ function Catalogue() {
   const [loading, setLoading] = useState(true)
   const [sortBy, setSortBy] = useState('default')
   const [searchTerm, setSearchTerm] = useState('')
+  const [sizeCharts, setSizeCharts] = useState([])
 
   useEffect(() => {
     setLoading(true)
@@ -26,6 +29,10 @@ function Catalogue() {
       })
       .finally(() => setLoading(false))
   }, [])
+
+  useEffect(() => {
+  getSizeCharts().then(setSizeCharts).catch(() => setSizeCharts([]))
+}, [])
 
   const activeCategory = categories.find((c) => String(c.id) === categoryId)
   const activeSubcategory = activeCategory?.subcategories?.find((s) => String(s.id) === subcategoryId)
@@ -54,7 +61,13 @@ function Catalogue() {
 
 
   return (
+    
     <div className="max-w-7xl mx-auto px-4 py-6">
+      <Seo
+  title="Catalogue"
+  description="Browse our full range of kids' dance and traditional costumes — available for rent or bulk order."
+  path="/catalogue"
+/>
       {/* Search bar */}
       <div className="mb-5">
         <div className="relative w-full md:max-w-md">
