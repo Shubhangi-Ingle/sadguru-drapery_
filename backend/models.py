@@ -44,7 +44,8 @@ class Product(Base):
 
     category = relationship("Category")
     subcategory = relationship("Subcategory")
-
+    size_chart_image_url = Column(String, nullable=True)
+    
     related_products = relationship(
         "Product",
         secondary=product_relations,

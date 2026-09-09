@@ -102,7 +102,7 @@ function ProductDetail() {
   }
 
   const status = statusStyles[product.status] || statusStyles.available
-  const matchedChart = sizeCharts[0]
+  const matchedChart = product.size_chart_image_url ? { chart_image_url: product.size_chart_image_url } : null
   const dummySizeChart = [
     { label: 'XSC (X-Small Child)', bust: '19–21', waist: '19–21', hips: '19–21' },
     { label: 'SC (Small Child)', bust: '23–26', waist: '22–24', hips: '23–27' },

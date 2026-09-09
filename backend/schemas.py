@@ -111,7 +111,7 @@ class ProductOut(BaseModel):
     images: List[ProductImageOut] = []
     sizes: List[ProductSizeOut] = []
     related_products: List[RelatedProductOut] = []
-
+    size_chart_image_url: Optional[str] = None
     class Config:
         from_attributes = True
 

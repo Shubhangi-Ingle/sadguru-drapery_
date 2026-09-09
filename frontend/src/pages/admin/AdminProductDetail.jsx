@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
+import { uploadProductSizeChart, deleteProductSizeChart } from '../../api/adminProducts'
 import {
   getProductAdmin,
   uploadProductImage,
@@ -24,6 +25,7 @@ function AdminProductDetail() {
 
   const [allProducts, setAllProducts] = useState([])
   const [relateId, setRelateId] = useState('')
+  const [uploadingSizeChart, setUploadingSizeChart] = useState(false)
 
   const loadProduct = () => {
     setLoading(true)
@@ -85,6 +87,28 @@ function AdminProductDetail() {
     }
   }
 
+    const handleUploadSizeChart = async (file) => {
+  if (!file) return
+  setUploadingSizeChart(true)
+  try {
+    const updated = await uploadProductSizeChart(productId, file)
+    setProduct(updated)
+  } catch (err) {
+    setError('Failed to upload size chart')
+  } finally {
+    setUploadingSizeChart(false)
+  }
+}
+
+const handleDeleteSizeChart = async () => {
+  if (!window.confirm('Remove the size chart for this product?')) return
+  try {
+    const updated = await deleteProductSizeChart(productId)
+    setProduct(updated)
+  } catch (err) {
+    setError('Failed to remove size chart')
+  }
+}
   const handleDeleteSize = async (sizeId) => {
     try {
       await deleteProductSize(sizeId)
@@ -190,6 +214,37 @@ function AdminProductDetail() {
             </div>
           ))}
         </div>
+        {/* Size Chart */}
+<div className="bg-white border border-gray-200 rounded-xl p-4 mt-4">
+  <h2 className="font-semibold text-gray-800 mb-3">Size Chart</h2>
+  {product.size_chart_image_url && (
+    <img src={product.size_chart_image_url} alt="Size chart" className="w-48 rounded-lg border border-gray-100 mb-3" />
+  )}
+  <div className="flex items-center gap-2 flex-wrap">
+    <label className={`text-xs font-medium px-2.5 py-1.5 rounded-lg border transition-colors ${
+      uploadingSizeChart
+        ? 'text-gray-400 border-gray-200 cursor-not-allowed'
+        : 'text-gray-600 hover:text-pink-600 cursor-pointer border-gray-200 hover:border-pink-300'
+    }`}>
+      {uploadingSizeChart ? 'Uploading...' : product.size_chart_image_url ? 'Change Size Chart' : 'Add Size Chart'}
+      <input
+        type="file"
+        accept="image/*"
+        className="hidden"
+        disabled={uploadingSizeChart}
+        onChange={(e) => handleUploadSizeChart(e.target.files[0])}
+      />
+    </label>
+    {product.size_chart_image_url && (
+      <button
+        onClick={handleDeleteSizeChart}
+        className="text-xs font-medium text-red-600 hover:text-white hover:bg-red-600 px-2.5 py-1.5 rounded-lg border border-red-200 transition-colors"
+      >
+        Remove
+      </button>
+    )}
+  </div>
+</div>
         <form onSubmit={handleAddSize} className="flex flex-wrap items-center gap-2">
           <input
             type="text"

@@ -51,6 +51,30 @@ def upload_product_image(product_id: int, file: UploadFile = File(...), is_cover
     db.refresh(new_image)
     return new_image
 
+@router.post("/{product_id}/upload-size-chart", response_model=schemas.ProductOut)
+def upload_product_size_chart(product_id: int, file: UploadFile = File(...), db: Session = Depends(get_db), admin: models.AdminUser = Depends(auth.get_current_admin)):
+    product = db.query(models.Product).filter(models.Product.id == product_id).first()
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+
+    result = cloudinary.uploader.upload(file.file)
+    product.size_chart_image_url = result["secure_url"]
+    db.commit()
+    db.refresh(product)
+    return product
+
+
+@router.delete("/{product_id}/size-chart", response_model=schemas.ProductOut)
+def delete_product_size_chart(product_id: int, db: Session = Depends(get_db), admin: models.AdminUser = Depends(auth.get_current_admin)):
+    product = db.query(models.Product).filter(models.Product.id == product_id).first()
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+
+    product.size_chart_image_url = None
+    db.commit()
+    db.refresh(product)
+    return product
+
 @router.post("/link-related")
 def link_related_product(link: schemas.LinkRelatedProduct, db: Session = Depends(get_db), admin: models.AdminUser = Depends(auth.get_current_admin)):
     product = db.query(models.Product).filter(models.Product.id == link.product_id).first()

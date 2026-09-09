@@ -99,3 +99,20 @@ export async function deleteProductSize(sizeId) {
   if (!res.ok) throw new Error("Failed to delete size")
   return res.json()
 }
+
+export async function uploadProductSizeChart(productId, file) {
+  const formData = new FormData()
+  formData.append("file", file)
+  const res = await adminFetch(`/products/${productId}/upload-size-chart`, {
+    method: "POST",
+    body: formData,
+  })
+  if (!res.ok) throw new Error("Failed to upload size chart")
+  return res.json()
+}
+
+export async function deleteProductSizeChart(productId) {
+  const res = await adminFetch(`/products/${productId}/size-chart`, { method: "DELETE" })
+  if (!res.ok) throw new Error("Failed to delete size chart")
+  return res.json()
+}
