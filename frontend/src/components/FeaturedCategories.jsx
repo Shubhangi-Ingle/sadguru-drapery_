@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { getCategories } from '../api/categories'
+import { optimizeImage } from '../utils/cloudinary'
 
 function FeaturedCategories() {
   const [categories, setCategories] = useState([])
@@ -45,8 +46,9 @@ function FeaturedCategories() {
           >
             {cat.cover_image_url ? (
               <img
-                src={cat.cover_image_url}
+                src={optimizeImage(cat.cover_image_url, 400)}
                 alt={cat.name}
+                loading="lazy"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               />
             ) : (

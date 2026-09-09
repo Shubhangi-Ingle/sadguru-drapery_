@@ -77,12 +77,12 @@ class ProductSize(Base):
     __tablename__ = "product_sizes"
 
     id = Column(Integer, primary_key=True, index=True)
-    size_label = Column(String, nullable=False)   # e.g. "S", "M", "L", "6-8 yrs"
-    is_available = Column(Integer, default=1)     # 1 = in stock, 0 = out for this size
+    size_label = Column(String, nullable=False)
+    is_available = Column(Integer, default=1)
+    restock_date = Column(Date, nullable=True)
     product_id = Column(Integer, ForeignKey("products.id"))
 
     product = relationship("Product", backref="sizes")
-
 class Review(Base):
     __tablename__ = "reviews"
 

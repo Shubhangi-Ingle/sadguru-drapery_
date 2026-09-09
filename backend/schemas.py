@@ -71,6 +71,7 @@ class SizeChartOut(BaseModel):
 class ProductSizeCreate(BaseModel):
     size_label: str
     is_available: bool = True
+    restock_date: Optional[date] = None
     product_id: int
 
 
@@ -78,9 +79,11 @@ class ProductSizeOut(BaseModel):
     id: int
     size_label: str
     is_available: int
+    restock_date: Optional[date] = None
 
     class Config:
         from_attributes = True
+        
 class RelatedProductOut(BaseModel):
     id: int
     name: str

@@ -20,6 +20,7 @@ function AdminProductDetail() {
 
   const [newSizeLabel, setNewSizeLabel] = useState('')
   const [newSizeAvailable, setNewSizeAvailable] = useState(true)
+  const [newSizeRestockDate, setNewSizeRestockDate] = useState('')
 
   const [allProducts, setAllProducts] = useState([])
   const [relateId, setRelateId] = useState('')
@@ -74,9 +75,10 @@ function AdminProductDetail() {
     e.preventDefault()
     if (!newSizeLabel.trim()) return
     try {
-      await addProductSize(productId, newSizeLabel.trim(), newSizeAvailable)
+      await addProductSize(productId, newSizeLabel.trim(), newSizeAvailable, newSizeRestockDate || null)
       setNewSizeLabel('')
       setNewSizeAvailable(true)
+      setNewSizeRestockDate('')
       loadProduct()
     } catch (err) {
       setError('Failed to add size')
@@ -179,6 +181,11 @@ function AdminProductDetail() {
               <span className={`text-sm font-medium ${size.is_available === 0 ? 'text-gray-400 line-through' : 'text-gray-700'}`}>
                 {size.size_label}
               </span>
+              {size.is_available === 0 && size.restock_date && (
+                <span className="text-[10px] text-amber-600">
+                  ({new Date(size.restock_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })})
+                </span>
+              )}
               <button onClick={() => handleDeleteSize(size.id)} className="text-gray-400 hover:text-red-600 text-xs">✕</button>
             </div>
           ))}
@@ -199,6 +206,15 @@ function AdminProductDetail() {
             />
             Available
           </label>
+          {!newSizeAvailable && (
+            <input
+              type="date"
+              value={newSizeRestockDate}
+              onChange={(e) => setNewSizeRestockDate(e.target.value)}
+              className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-200"
+              title="Expected restock date (optional)"
+            />
+          )}
           <button
             type="submit"
             className="bg-pink-600 hover:bg-pink-700 text-white font-medium px-4 py-2 rounded-lg text-sm transition-colors"

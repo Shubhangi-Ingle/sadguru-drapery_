@@ -51,11 +51,16 @@ export async function uploadProductImage(productId, file, isCover) {
   return res.json()
 }
 
-export async function addProductSize(productId, sizeLabel, isAvailable) {
+export async function addProductSize(productId, sizeLabel, isAvailable, restockDate) {
   const res = await adminFetch(`/product-sizes/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ size_label: sizeLabel, is_available: isAvailable, product_id: productId }),
+    body: JSON.stringify({
+      size_label: sizeLabel,
+      is_available: isAvailable,
+      restock_date: restockDate || null,
+      product_id: productId,
+    }),
   })
   if (!res.ok) throw new Error("Failed to add size")
   return res.json()

@@ -3,6 +3,8 @@ import { useParams, useNavigate, useLocation, Link } from 'react-router-dom'
 import { getProduct } from '../api/products'
 import { getApprovedReviews, submitReview, uploadReviewImage } from '../api/reviews'
 import { WHATSAPP_NUMBER } from '../config'
+import { optimizeImage } from '../utils/cloudinary'
+import { getSizeCharts } from '../api/sizeCharts'
 
 const statusStyles = {
   available: { label: "In Production", classes: "bg-green-100 text-green-700" },
@@ -27,6 +29,9 @@ function ProductDetail() {
   const [reviewSubmitted, setReviewSubmitted] = useState(false)
   const [reviewError, setReviewError] = useState('')
   const [reviewPhoto, setReviewPhoto] = useState(null)
+  const [sizeCharts, setSizeCharts] = useState([])
+  const [showAvailability, setShowAvailability] = useState(false)
+  const [showSizeChart, setShowSizeChart] = useState(false)
 
   useEffect(() => {
     setLoading(true)
@@ -47,6 +52,10 @@ function ProductDetail() {
       .catch(() => setReviews([]))
       .finally(() => setReviewsLoading(false))
   }, [productId])
+
+  useEffect(() => {
+    getSizeCharts().then(setSizeCharts).catch(() => setSizeCharts([]))
+  }, [])
 
   const handleReviewSubmit = async (e) => {
     e.preventDefault()
@@ -118,7 +127,7 @@ function ProductDetail() {
           <div>
             <div className="aspect-[3/4] bg-[#FBF3E9] rounded-xl overflow-hidden mb-3 ring-1 ring-[#B8863B]/15">
               {activeImage ? (
-                <img src={activeImage} alt={product.name} className="w-full h-full object-cover" />
+                <img src={optimizeImage(activeImage, 800)} alt={product.name} className="w-full h-full object-cover" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-gray-400">No image yet</div>
               )}
@@ -129,11 +138,10 @@ function ProductDetail() {
                   <button
                     key={img.id}
                     onClick={() => setActiveImage(img.image_url)}
-                    className={`shrink-0 w-16 h-20 rounded-lg overflow-hidden border-2 transition-colors ${
-                      activeImage === img.image_url ? 'border-[#B8863B]' : 'border-[#B8863B]/20'
-                    }`}
+                    className={`shrink-0 w-16 h-20 rounded-lg overflow-hidden border-2 transition-colors ${activeImage === img.image_url ? 'border-[#B8863B]' : 'border-[#B8863B]/20'
+                      }`}
                   >
-                    <img src={img.image_url} alt="" className="w-full h-full object-cover" />
+                    <img src={optimizeImage(img.image_url, 150)} alt="" loading="lazy" className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>
@@ -168,26 +176,61 @@ function ProductDetail() {
               <p className="text-gray-600 leading-relaxed mb-6">{product.description}</p>
             )}
 
-            {/* Sizes */}
+            {/* Size selector + Check Availability + Size Chart */}
             {product.sizes?.length > 0 && (
               <div className="mb-6">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-700">Available Sizes</span>
+                <div className="flex items-center justify-between mb-2 flex-wrap gap-2">
+                  <span className="text-sm font-medium text-gray-700">Select Size</span>
+                  <div className="flex items-center gap-4">
+                    <button
+                      onClick={() => setShowAvailability(true)}
+                      className="text-xs font-semibold text-[#7A1F2B] hover:underline"
+                    >
+                      Check Availability
+                    </button>
+                    {sizeCharts.some((c) => c.category_id === product.category_id) && (
+                      <button
+                        onClick={() => setShowSizeChart(!showSizeChart)}
+                        className="text-xs font-semibold text-[#7A1F2B] hover:underline"
+                      >
+                        {showSizeChart ? 'Hide Size Chart' : 'Size Chart'}
+                      </button>
+                    )}
+                  </div>
                 </div>
-                <div className="flex flex-wrap gap-2">
+
+                <div className="flex flex-wrap gap-2 mb-3">
                   {product.sizes.map((size) => (
-                    <span
+                    <button
                       key={size.id}
-                      className={`min-w-[3rem] text-center px-3 py-2 text-sm font-medium rounded-lg border ${
-                        size.is_available === 0
-                          ? 'border-gray-200 text-gray-300 line-through bg-gray-50'
-                          : 'border-[#B8863B]/35 text-gray-700 bg-white'
-                      }`}
+                      disabled={size.is_available === 0}
+                      className={`min-w-[3rem] px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${size.is_available === 0
+                          ? 'border-gray-200 text-gray-300 line-through cursor-not-allowed bg-gray-50'
+                          : 'border-gray-300 text-gray-700 hover:border-pink-500 hover:text-pink-600'
+                        }`}
                     >
                       {size.size_label}
-                    </span>
+                    </button>
                   ))}
                 </div>
+
+                {/* Inline Size Chart */}
+                {showSizeChart && (
+                  <div className="border border-gray-200 rounded-xl p-4 mb-3">
+                    {sizeCharts
+                      .filter((c) => c.category_id === product.category_id)
+                      .map((chart) => (
+                        <div key={chart.id}>
+                          {chart.chart_image_url && (
+                            <img src={chart.chart_image_url} alt="Size chart" className="w-full rounded-lg mb-3" />
+                          )}
+                          {chart.chart_text && (
+                            <p className="text-sm text-gray-600 leading-relaxed">{chart.chart_text}</p>
+                          )}
+                        </div>
+                      ))}
+                  </div>
+                )}
               </div>
             )}
 
@@ -234,8 +277,9 @@ function ProductDetail() {
                   <div className="aspect-[3/4] bg-[#FBF3E9] overflow-hidden">
                     {related.images?.[0]?.image_url ? (
                       <img
-                        src={related.images[0].image_url}
+                        src={optimizeImage(related.images[0].image_url, 300)}
                         alt={related.name}
+                        loading="lazy"
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                     ) : (
@@ -407,6 +451,67 @@ function ProductDetail() {
         </div>
 
       </div>
+
+      {/* Check Availability Modal */}
+      {showAvailability && (
+        <div
+          className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4"
+          onClick={() => setShowAvailability(false)}
+        >
+          <div
+            className="bg-white rounded-2xl max-w-lg w-full max-h-[85vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+              <h3 className="font-semibold text-gray-900 text-lg">
+                Style Availability — {product.name}
+              </h3>
+              <button onClick={() => setShowAvailability(false)} className="text-gray-400 hover:text-gray-700">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="px-6 py-4">
+              <p className="text-sm text-gray-500 mb-4">
+                Stock updates regularly. For bulk orders or a specific delivery date, message us on WhatsApp.
+              </p>
+
+              <div className="border border-gray-200 rounded-xl overflow-hidden">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr>
+                      <th className="text-left px-4 py-3 font-semibold text-white bg-gray-900">Size</th>
+                      <th className="text-left px-4 py-3 font-semibold text-white bg-[#7A1F2B]">In-Stock</th>
+                      <th className="text-left px-4 py-3 font-semibold text-white bg-green-600">Coming Soon</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {product.sizes?.map((size, idx) => (
+                      <tr key={size.id} className={idx % 2 === 1 ? 'bg-gray-50' : 'bg-white'}>
+                        <td className="px-4 py-3 text-gray-800 font-medium">{size.size_label}</td>
+                        <td className="px-4 py-3 text-gray-700">
+                          {size.is_available === 1 ? '1' : '0'}
+                        </td>
+                        <td className="px-4 py-3 text-gray-700">
+                          {size.is_available === 0 && size.restock_date ? (
+                            <>Order today for {new Date(size.restock_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</>
+                          ) : size.is_available === 0 ? (
+                            'Currently unavailable'
+                          ) : (
+                            '—'
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

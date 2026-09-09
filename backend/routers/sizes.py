@@ -50,6 +50,7 @@ def add_product_size(size: schemas.ProductSizeCreate, db: Session = Depends(get_
     new_size = models.ProductSize(
         size_label=size.size_label,
         is_available=1 if size.is_available else 0,
+        restock_date=size.restock_date,
         product_id=size.product_id
     )
     db.add(new_size)

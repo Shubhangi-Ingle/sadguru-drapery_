@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { getDesigns, getDesignsCount } from '../api/designs'
+import { optimizeImage } from '../utils/cloudinary'
 
 const PAGE_SIZE = 24
 
@@ -60,8 +61,9 @@ function DesignGallery() {
                 className="group relative aspect-[3/4] rounded-xl overflow-hidden bg-gray-50 flex items-center justify-center"
               >
                 <img
-                  src={design.image_url}
+                  src={optimizeImage(design.image_url, 400)}
                   alt={design.caption || 'Design'}
+                  loading="lazy"
                   className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
                 />
                 {design.caption && (
@@ -104,7 +106,7 @@ function DesignGallery() {
           </button>
           <div className="max-w-3xl max-h-[85vh]" onClick={(e) => e.stopPropagation()}>
             <img
-              src={lightboxImage.image_url}
+              src={optimizeImage(lightboxImage.image_url, 1200)}
               alt={lightboxImage.caption || 'Design'}
               className="max-w-full max-h-[85vh] object-contain rounded-lg"
             />

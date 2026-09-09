@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { WHATSAPP_NUMBER } from '../config'
+import { optimizeImage } from '../utils/cloudinary'
 
 function ProductCard({ product }) {
   const coverImage =
@@ -42,7 +43,7 @@ const EnquireButton = ({ className = '' }) => (
       {/* Mobile: Amazon-style horizontal list card */}
       <div className="w-32 shrink-0 sm:hidden aspect-square bg-gray-100">
         {coverImage ? (
-          <img src={coverImage} alt={product.name} className="w-full h-full object-cover" />
+          <img src={optimizeImage(coverImage, 300)} alt={product.name} loading="lazy" className="w-full h-full object-cover" />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">No image</div>
         )}
@@ -74,8 +75,9 @@ const EnquireButton = ({ className = '' }) => (
         <div className="relative aspect-[3/4] bg-gray-100 overflow-hidden">
           {coverImage ? (
             <img
-              src={coverImage}
+              src={optimizeImage(coverImage, 500)}
               alt={product.name}
+              loading="lazy"
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             />
           ) : (
